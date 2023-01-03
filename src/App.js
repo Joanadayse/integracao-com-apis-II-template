@@ -21,27 +21,50 @@ function App() {
     getUsuarios();
   }, []);
 
-  const getUsuarios = () => {
-    axios
+  useEffect(()=>{
+pesquisaUsuario(pesquisa)
+  },[pesquisa])
+
+  const getUsuarios = async () => {
+    try{
+      const response= await  axios
       .get(
         "https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users",
         {
           headers: {
-            Authorization: "ana-sammi-barbosa",
+            Authorization: "daysee-c-barbosa",
           },
         }
       )
-      .then((res) => {
-        setUsuarios(res.data);
-      })
-      .catch((error) => {
+      setUsuarios(response.data);
+    }
+   
+     
+       
+      
+      catch(error)  {
         console.log(error.response);
-      });
+      };
   };
 
-  const pesquisaUsuario = (pesquisa) => {
-   
+  
+  const pesquisaUsuario = async (pesquisa) => {
+    try {
+      const response = await axios.get(
+        `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/search?name=${pesquisa.nome}&email=${pesquisa.email}`,
+        {
+          headers: {
+            authorization: "daysee-c-barbosa"
+          }
+        }
+      );
+      setUsuarios(response.data);
+      setPageFlow(3);
+    } catch (error) {
+      console.log(error.response);
+    }
   };
+
 
   const onChangeName = (e) => {
     setNome(e.target.value);
@@ -57,7 +80,8 @@ function App() {
       email,
     };
     setPesquisa(novaPesquisa);
-   
+    // o que o usuario digita no input 
+   pesquisaUsuario(pesquisa)
     setNome("")
     setEmail("")
     

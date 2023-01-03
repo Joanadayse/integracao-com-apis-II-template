@@ -17,7 +17,7 @@ export const EditarUsuario = (props) => {
         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${props.id}`,
         {
           headers: {
-            Authorization: "ana-sammi-barbosa",
+            Authorization: "daysee-c-barbosa",
           },
         }
       )
@@ -35,45 +35,58 @@ export const EditarUsuario = (props) => {
     getDadosUsuario();
   }, []);
 
-  const editaUsuario = () => {
+  const editaUsuario = async () => {
     const body = {
         name,
         email
       };
-      axios
+
+      try{
+         await axios
         .put(
           `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
           body,
           {
             headers: {
-              Authorization: "ana-sammi-barbosa"
+              Authorization: "daysee-c-barbosa"
             }
           }
         )
-        .then(() => {
+       
           getDadosUsuario();
-          setEditar(!editar)
-        });
-  }
+          setEditar(!editar) 
 
-  const deletarUsuario = () => {
-    axios
+      } catch (error){
+        console.log(error.response)
+      }
+    }
+      
+       
+  
+
+  const deletarUsuario = async() => {
+    try{
+     await axios
       .delete(
         `https://us-central1-labenu-apis.cloudfunctions.net/labenusers/users/${usuario.id}`,
         {
           headers: {
-            Authorization: "ana-sammi-barbosa"
+            Authorization: "daysee-c-barbosa"
           }
         }
       )
-      .then(() => {
+    
         alert("usuario removido");
         // chama de novo o get usuarios pra atualizar a lista
         props.getUsuarios();
-      })
-      .catch((err) => {
+    
+
+    }
+   
+     
+      catch(err)  {
         console.log(err.response);
-      });
+      };
   };
 
 
